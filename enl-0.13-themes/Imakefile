@@ -1,0 +1,18 @@
+XCOMM	Default Themes Installer
+XCOMM	------------------------
+
+#include "Enl.tmpl"
+
+ENLTHMDIR=$(ENLROOT)/themes
+
+all::
+
+InstallNonExecFile(DEFAULT,$(ENLTHMDIR))
+InstallNonExecFile(DEFAULT_small,$(ENLTHMDIR))
+
+depend::
+
+includes::
+
+clean::
+

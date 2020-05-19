@@ -1,0 +1,13 @@
+For this installation to work correctly, you must place this
+directory DIRECTLY INSIDE your enlightenment source directory.
+
+Or you can link the Enl.tmpl file to the correct location.
+
+Simply type :
+
+	xmkmf -a; make install
+
+to install
+
+
+11/17/97 - Mandrake

@@ -1,0 +1,51 @@
+XCOMM	Configuration File for Enlightenment 0.13
+XCOMM	-----------------------------------------
+
+XCOMM	Installation Directory
+XCOMM	----------------------
+XCOMM	Define this to be the location of the root installation directory.
+
+ENLROOT=/usr/enlightenment
+
+XCOMM	Enlightenment Themes 
+XCOMM	--------------------
+XCOMM	If you have a themes directory off of the main e source code
+XCOMM	directory and would like for xmkmf to build the appropriate
+XCOMM	makefiles there too, then set this to YES
+
+#define ThemesDirPresent NO
+
+XCOMM	Threading Support
+XCOMM	-----------------
+XCOMM	By default, we will try to build the threaded version of 
+XCOMM	enlightenment if your X is also threaded.  This *can* lead to
+XCOMM	performance degradation on non-multi-CPU architectures, depending
+XCOMM	upon how effecient your threads are.
+
+#define	ThreadedE	ThreadedX	
+
+XCOMM	C Compiler Options
+XCOMM	------------------
+XCOMM	If you want to use pgcc, then, uncomment this.
+
+XCOMM	CC=pgcc
+XCOMM	#define HasPgcc YES
+
+XCOMM	Additional Defines
+XCOMM	------------------
+XCOMM	If your C compiler requires special options, this is the place to put
+XCOMM	them.  We have included recommended entries for a few compilers...
+
+#if HasGcc2					/* GNU C */
+DEFINES = -D_USE_VSNPRINTF
+CDEBUGFLAGS = -Wall -pedantic
+#elif HasSunC					/* Sun's DevPro v2.x + */
+DEFINES = -D_USE_VSNPRINTF -D__EXTENSIONS__ -D_POSIX_C_SOURCE
+CDEBUGFLAGS = -v -fast -native
+#elif ModernOSF1				/* Digital UNIX */
+DEFINES = -D_POSIX_C_SOURCE
+CDEBUGFLAGS = -verbose -fast
+#else
+DEFINES =
+CDEBUGFLAGS = -O
+#endif
