@@ -1,0 +1,12 @@
+PKG=@ENLPKGDIR@
+NAME=Enlightenment Window Manager
+CATEGORY=application
+VENDOR=Carsten Haitzler and Geoff Harrison
+EMAIL=e-develop@rasterman.com
+HOTLINE=e-develop@rasterman.com
+DESC=Copyrighted FREEWARE. 
+CLASSES=none
+BASEDIR=@ENLROOT@
+VERSION="@VERSION@"
+PSTAMP="@PSTAMP@"
+ARCH="@ARCH@"

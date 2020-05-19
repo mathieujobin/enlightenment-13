@@ -1,0 +1,34 @@
+XCOMM	Enlightenment CDE Support Imakefile
+XCOMM	-----------------------------------
+
+XCOMM	First, grab our user settings...
+#include "../Enl.tmpl"
+
+XCOMM	Makefile magic...
+.SUFFIXES: .pre 
+.pre:
+	cat $< | sed -e 's#@ENLROOT@#$(ENLROOT)#g' > $@
+
+AllTarget(mk_dt_e)
+AllTarget(Xsession.patch)
+
+all::
+
+includes::
+
+clean::
+	$(RM) mk_dt_e Xsession.patch
+
+distclean:
+	$(MAKE) $(MFLAGS) clean
+	$(RM) Makefile
+
+XCOMM	*trick*
+
+install::
+	MakeDir($(ENLROOT)/dt)
+	InstallNonExecFile(Xsession.patch,$(ENLROOT)/dt)
+	MakeDir($(ENLROOT)/dt/bin)
+	InstallProgram(mk_dt_e,$(ENLROOT)/dt/bin)
+	MakeDir($(ENLROOT)/dt/icons)	
+	InstallMultiple(icons/\*,$(ENLROOT)/dt/icons)

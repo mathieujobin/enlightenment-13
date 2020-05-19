@@ -1,0 +1,122 @@
+Now to all those who can't put 2 and 2 together from the readme.. here is a
+big speel about how E is configured via themeballs, and what exactly a
+themeball is. E comed out of the box wiht 2 themeballs in
+/usr/local/enlightenment/themes. you can shose any theme by:
+enlightenment -theme theme_ball_file
+by default if E is given NO theme to use.. it looks for a themeball called
+DEFAULT in /usr/local/enlightenment/themes (or wherever you installed
+Enlightenment)
+
+A "themeball" can be on of 3 formats:
+a .tar.gz file
+a .tar file
+a directory containing the contents of the theme.. 
+so the tarball has the following contents:
+
+if its a tar.gz themeball:
+
+> tar ztf /usr/local/enlightenment/DEFAULT
+MAIN
+buttons
+cursors
+exec
+fx
+icons
+infobox
+menus
+pix/
+pix/icon_term_2.ppm
+pix/icon_term_1.ppm
+pix/icon_term_3.ppm
+etc.....
+
+if its a vanilla tar themeball:
+
+> tar tf /usr/local/enlightenment/DEFAULT
+MAIN
+buttons
+cursors
+exec
+fx
+icons
+infobox
+menus
+pix/
+pix/icon_term_2.ppm
+pix/icon_term_1.ppm
+pix/icon_term_3.ppm
+pix/iconbox_arrow1_1.ppm
+pix/iconbox_arrow2_1.ppm
+pix/iconbox_bg.ppm
+etc.
+
+if it is a directoy themeball:
+
+> ls
+/usr/local/enlightenment/themes/DEFAULTtotal 69
+1 ./      1 cursors  2 infobox  2 status
+1 ../     1 exec    27 menus    1 text
+3 MAIN    1 fx       2 pix/    15 windowstyles
+7 buttons 4 icons    1 root
+
+its as simlpe as that! you can keep the themeball unzipped, but tarred
+for neatness, or keep it untarred in a directry.. or tarred and gzipped. Its 
+your choice. I distribute themeballs tarred & gzipped. If you ever make a 
+theme and want to release it.. the advantage is you can just release your 
+themeball as-is (tar & gzip up the direcoty, or just gzip yer theme tar.. or 
+just upload the .tar.gz themeball as is if u work on it in that fashion as i 
+do)... its that simple. E by default if not told to use a theme will first
+look for the DEFAULT themeball mentions above.. and the it looks for config 
+files in .enlightenemnt. the config files or data files in here should
+correspond to the equivalents in the theme (eg MAIN, buttons, or files like
+pix.button.ppm etc.). These override any of the corresponding files in the
+theme.. so a user can select hsi favorite theme stored on hsimachine.. and
+copy just the fiels he wishes to change from the default to his
+.enlightenment dir and edit them.. if he doesn like an icon.. just make a
+replacement in the same position in .enlightnement (like
+.enlightnement/pix/button.ppm will override the image pix/button.ppm in the
+theme). If E cant find a themeball it it tries 
+/usr/local/enlightenent/system_config as it did before for config files.. 
+these are not interpreted as themeball files.. but require full paths to 
+images.. these are last-resort config files setup by system admin if
+all-else fails.. if this fails.. E bails out and wont load.
+
+Now I hope that clears it all up once and for all. I have given you all
+you need to make thngs like theme managers that run before E runs that
+can choose and manage installed and user owned themeballs.. and to
+select them etc. Thsi isnt E's task. the hooks are there. Use
+them. If a theme manager doesnt appear in the near future.. i prolly will write
+one myself.... this is where phase 2 for themeballs comes in:
+
+a theme manager would, (liek E). look inside themeballs for lets say a
+certain file (called lets say for now THEME)... This is a text file that 
+maybe looks like this:
+
+TITLE: Default Enlgihtenment Theme 
+RELEASE: Sat Jun 28 00:38:40 1997
+AUTHOR: The Rasterman
+LICENCE: COPYRIGHT 1997, GPL License
+DESCRIPTION: This is the default theme
+provided with Enlightenment. It
+isn't as fast or efficient as could be, but is designed to
+show off as many features of Enlightenment as possible.
+E-VERSION: Required Minimum - Enlightenment 1.0 Thebes DR-0.10
+BANNER: info/banner.ppm
+THUMBNAIL: info/thumbnail.ppm
+
+that would be a sample file.. the theme manager would read and interpret. It 
+could provide a list of themes form a directory.. or a config file.. and from 
+this THEME info file display the title, author, description etc. in a gui... 
+and then also show a scaled down image fo a screenshot of the theme running 
+(the thumbanil) to give people an idea of what it looks like, and a banner 
+image to use as a title icon/banner/marker for the theme.
+
+these files are created byt he theme maker basically to provide more info, 
+and to advertise themselves. This is my current idea.. but this isnt part of 
+Enlightenment directly. This would be the tast of a "helper" app.. like a 
+theme manager. Any of you buddign coders out there who knoe a decent amount 
+on how to code for X.. and maybe use imlib (you would need to to load up the 
+thumbnails and banner images at any rate..).. this could be a small good 
+project to start. :)
+
+Now happy Playing with your new environment!

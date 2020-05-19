@@ -1,0 +1,50 @@
+#!/usr/dt/bin/dtksh
+ENL_ROOT="@ENLROOT@"
+
+#
+# If they don't exist, create our custom directories in /etc/dt
+# This is the *PROPER* way to change CDE--upgrades are written so
+# as to not muck with this directory.
+#
+if [[ ! -d "/etc/dt/config/C/Xresources.d" ]]; then
+	mkdir -p /etc/dt/config/C/Xresources.d
+fi
+if [[ ! -d "/etc/dt/appconfig/icons/C" ]]; then
+	mkdir -p /etc/dt/appconfig/icons/C
+fi
+if [[ ! -d $ENL_ROOT"/dt/icons" ]]; then
+	mkdir -p $ENL_ROOT"/dt/icons"
+fi
+
+#
+# Blow away any old resource files.  This is done in case a theme
+# has been deleted.
+#
+rm -rf /etc/dt/config/C/Xresources.d/Xresources.enl_* > /dev/null 2>&1
+
+#
+# Loop through all of the themes in $ENL_ROOT and create
+# a resource file
+#
+for i in `ls $ENL_ROOT/themes`
+do
+	THEME=`basename $i`
+	XRESNAME="/etc/dt/config/C/Xresources.d/Xresources.enl_"$THEME
+
+	ln -s $ENL_ROOT"/dt/icons/"$THEME"_logo.bm" \
+               "/etc/dt/appconfig/icons/C/"$THEME"_Logo.bm" > /dev/null 2>&1
+        ln -s $ENL_ROOT"/dt/icons/"$THEME"_logo.pm" \
+               "/etc/dt/appconfig/icons/C/"$THEME"_Logo.pm" > /dev/null 2>&1
+
+	echo "!!##########################################" >> $XRESNAME
+	echo "!!" >> $XRESNAME
+	echo "!!   AUTO-GENERATED RESOURCE FILE " >> $XRESNAME
+	echo "!!   FOR ENLIGHTENMENT WINDOW MANAGER " >> $XRESNAME
+	echo "!! " >> $XRESNAME
+	echo "!!##########################################" >> $XRESNAME
+	echo "Dtlogin*altDtsIncrement:\tTrue" >> $XRESNAME
+	echo "Dtlogin*altDtName:\tEnlightenment $THEME Desktop" >> $XRESNAME
+	echo "Dtlogin*altDtKey:\t"$ENL_ROOT"/bin/enlightenment" >> $XRESNAME
+	echo "Dtlogin*altDtStart:\t/etc/dt/config/Xsession.enl $THEME" >> $XRESNAME
+	echo "Dtlogin*altDtLogo:\t"$THEME"_Logo" >> $XRESNAME
+done

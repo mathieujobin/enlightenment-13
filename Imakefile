@@ -1,0 +1,81 @@
+XCOMM			Enlightenment Configuration File
+XCOMM	------------------------------------------------------
+
+XCOMM	Enlightenment Version
+XCOMM	---------------------
+ENLVERSION=0.13.3
+
+SRC1 = main.c lists.c draw.c events.c wininfo.c actions.c ewin.c 
+SRC2 = loadcfg.c root.c text.c status.c buttons.c alert.c iconify.c 
+SRC3 = menus.c globals.c infobox.c file.c regexp.c desktops.c misc.c 
+SRC4 = states.c keys.c windowops.c
+
+SRCS = $(SRC1) $(SRC2) $(SRC3) $(SRC4)
+
+OBJ1 = main.o lists.o draw.o events.o wininfo.o actions.o ewin.o
+OBJ2 = loadcfg.o root.o text.o status.o buttons.o alert.o iconify.o
+OBJ3 = globals.o menus.o infobox.o file.o regexp.o desktops.o misc.o
+OBJ4 = states.o keys.o windowops.o
+
+OBJS = $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4)
+
+XCOMM	Let's grab the silly user setup stuff...
+#include "Enl.tmpl"
+
+AllTarget($(ENLNAME))
+
+#if ThemesDirPresent
+T_SUB = themes
+#endif
+
+#define IHaveSubdirs
+SUBDIRS = dt packages $(T_SUB)
+
+#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+
+INCLUDES = -I. $(ENL_USR_INC) -I/usr/local/include
+SYS_LIBRARIES = $(XLIB) -lm
+LOCAL_LIBRARIES = -lImlib -lpng -lz
+LOCAL_LDFLAGS = $(ENL_USR_LIB)
+
+
+XCOMM	Now, based on that, we can decided how fancy we want to be...
+
+XCOMM	For thread support...
+#if ThreadedE
+#define LocalThreadsDefines -D_USE_PTHREADS
+#include <Threads.tmpl>
+#endif
+
+XCOMM	Define _our_ places to install stuff...
+ENLBINDIR=$(ENLROOT)/bin
+ENLTHMDIR=$(ENLROOT)/themes
+ENLETCDIR=$(ENLROOT)/etc
+
+XCOMM	Once we know these...
+ETC_DEF = -DSYSCONFIG_DIR=\"$(ENLETCDIR)/\"
+THM_DEF = -DTHEMES_DIR=\"$(ENLTHMDIR)/\"
+VER_DEF = -DVERSION=\"$(ENLVERSION)\"
+
+DEFINES = $(ENL_USR_FLAGS) $(ETC_DEF) $(THM_DEF) $(VER_DEF)
+
+XCOMM	I prefer using this method, since we don't have to redfine
+XCOMM	ProjectRoot or the other xxxDIR entries, which screws up
+XCOMM	make Makefile, make Makefiles, xmkmf -a and other calls...
+
+NormalProgramTarget($(ENLNAME),$(OBJS),,$(LOCAL_LIBRARIES),)
+InstallProgram($(ENLNAME),$(ENLBINDIR))
+
+DependTarget()
+LintTarget()
+
+MakeSubdirs($(SUBDIRS))
+DependSubdirs($(SUBDIRS))
+
+distclean:
+	$(MAKE) $(MFLAGS) clean
+	@for i in $(SUBDIRS); \
+	do \
+		(cd $$i; $(MAKE) $(MFLAGS) distclean ); \
+	done
+	$(RM) -r Makefile .depend

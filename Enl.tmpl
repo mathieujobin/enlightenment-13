@@ -1,0 +1,67 @@
+XCOMM	Configuration File for Enlightenment 0.13.2
+XCOMM	-----------------------------------------
+
+XCOMM	Enlightenment Binary Name
+XCOMM	-------------------------
+ENLNAME=enlightenment
+
+XCOMM	Installation Directory
+XCOMM	----------------------
+XCOMM	Define this to be the location of the root installation directory.
+
+ENLROOT=/usr/local/enlightenment
+
+XCOMM	Enlightenment Themes 
+XCOMM	--------------------
+XCOMM	If you have a themes directory off of the main e source code
+XCOMM	directory and would like for xmkmf to build the appropriate
+XCOMM	makefiles there too, then set this to YES
+
+#define ThemesDirPresent NO
+
+XCOMM	Threading Support
+XCOMM	-----------------
+XCOMM	By default, we will try to build the threaded version of 
+XCOMM	enlightenment if your X is also threaded.  This *can* lead to
+XCOMM	performance degradation on non-multi-CPU architectures, depending
+XCOMM	upon how effecient your threads are.
+
+#define	ThreadedE	ThreadedX	
+
+XCOMM	Additional Defines
+XCOMM	------------------
+XCOMM	If your C compiler requires special options, this is the place to put
+XCOMM	them.  We have included recommended entries for a few compilers...
+
+XCOMM	GNU C v2.xxx
+#if HasGcc2
+ENL_USR_FLAGS = -D_USE_VSNPRINTF -Wall -pedantic
+
+XCOMM	Solaris v2.6 or Solaris v2.xx
+#elif defined(HasSunC) || defined(SunArchitecture) && defined(SVR4)
+ENL_USR_FLAGS =  -D_USE_VSNPRINTF -D__EXTENSIONS__ -D_POSIX_C_SOURCE -v -fast -native 
+
+XCOMM	Digital UNIX
+#elif ModernOSF1				/* Digital UNIX */
+ENL_USR_FLAGS = -D_POSIX_C_SOURCE -verbose -fast
+
+XCOMM	<Your OS here>
+#else
+ENL_USR_FLAGS = -O
+
+#endif
+
+XCOMM   Include Files
+XCOMM   -------------
+XCOMM   If you have some extra include files that you would like to
+XCOMM   have available, set this.
+
+XCOMM ENL_USR_INC = -I<your directory here>
+
+XCOMM   Library Files
+XCOMM   -------------
+XCOMM   If you need an additional path to find libraries in,
+XCOMM   set this.
+
+XCOMM ENL_USR_LIB = -L<your directory here>
+

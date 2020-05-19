@@ -1,0 +1,212 @@
+Enlightenment BETA 0.13.3 (02/15/98)
+This software is copyright (C) 1998 by Carsten Haitzler and Geoff Harrison
+All additional work submitted by additional authors is copyright respective
+authors.
+
+The authors accept no responsibility for anything this software may or may not
+do to your machine, other software on your machine, yourself, your family, your
+friends, or anything else.  There is no guarantee placed on the software, it's
+stability, its usefulness in operation, or satisfaction of the user after using
+the software.
+
+This software is copyrighted under the GPL (GNU Public License).  See the
+COPYING file for details.
+
+Welcome to Enlightenment BETA release 0.13.3!  And before all of you ask,
+yes, we did in fact say there wouldn't be any more releases before 0.14 came
+out.  However, since 0.13 is still the code we run on our desktops,
+occasionally we hit a few bugs that would annoy the piss out of us, and fix
+them.  Eventually enough little bugfixes stack up to a bugfix release.
+
+This release of enlightenment contains a bunch of annoying bug fixes, too
+numerous to list here... but more importantly, this release works with
+imlib 1.0!  you will definately want to get a copy of that and install
+it, too!
+
+THIS IS THE FINAL FREAKING RELEASE OF 0.13!  I have too much work to do
+for 0.14 before Linux Expo comes up in May (It's approaching quickly).
+I know, I meant to fix all sorts of other bugs in this release, but trust
+me, you would rather hvae me work on 0.14 now.  :)
+-- Mandrake
+
+
+A note to those interested in DR 0.14 of enlightenment:
+	No, we haven't forgotten about the next release of enlightenment, folks.
+	It's actually coming along quite nicely.  However, I can say that this
+	rewrite of code is going to be considerably time consuming.  If you've
+	enjoyed what previous sneak peaks you've had into some of the development
+	work, just wait until you see what's actually in store for you!  I can say
+	only one thing about it: "Expect to be amazed."  I'm still amazed at some
+	of the stuff that's going into it, and I'm one of the ones doing it.
+	External modules that can plug into enlightenment via an IPC API that is
+	currently under way will turn Eplus and Eterm and any other E-enabled
+	applications into fully interactive desktop components that can communicate
+	with and manipulate the window manager and any components thereof.
+	(imagine pushing a button on eplus to add components to the pulldown menus
+	of all your Eterms...  Imagine having an animated smoked glass window for
+	your tail -f /var/adm/messages that is TRANSLUCENT where you can see 
+	through to your various desktop patterns.  Just some of the stuff you can
+	look forward to in the future of enlightenment)  Anyways if you are
+	interested in seeing the future of enlightenment, feel free to join us this
+	year in May (28-30) at the Linux Expo (http://www.linuxexpo.org).
+
+TESTED PLATFORMS:
+
+	This version of enlightenment has been compiled, installed, and run
+	under the following UNIX systems with their native compiler:
+
+			Solaris
+			Linux
+			FreeBSD
+			Irix -- with a usleep hack available on the list
+			Digital UNIX
+			AIX
+			NetBSD
+			BSD/OS (BSDI)
+
+	If you have another flavor of unix installed on your machine
+	and it compiled/installed/ran successfully, please let me know so
+	that I may add it to this growing list.  If you have modified your
+	distribution in any way to get it to compile or run properly, PLEASE
+	send in what you did to make it work so that it might be added into
+	the distribution package.
+
+	Also, if you're running Digital UNIX, PLEASE install GNU make.
+	DEC's make is very buggy, and doesn't support a lot of features
+	that are needed by the Imakefiles.  (Usually their tools are
+	fairly decent, but make is just broke, broke, broke)
+
+	As far as X requirements, everything is built for X11R5+.  If
+	you can get it to work on an earlier version, send us mail
+	on how you did it (we're befuzzled, too).
+
+HOW TO INSTALL:
+
+	Compiling and installing enlightenment on your system is very simple.
+	It requires that you possess ImageMagick or NetPBM, imlib, and
+	enlightenment itself.  Instructions for imlib are included in the
+	imlib distribution (ftp.mandrake.net/pub/imlib).  Once you have
+	imlib installed and running, you should edit the Enl.tmpl file
+	according to how you wish your system to be set up.  Once have 
+	edited the Enl.tmpl file to your satisfaction, simply enter the 
+	source directory for enlightenment, and type:
+
+		xmkmf -a
+
+	Once you have done this, a Makefile should be generated that works
+	with your system.  (provided you have X and the imake packages
+	installed on your system)  Next type:
+
+		make
+
+	This will compile the sources for enlightenment and place an
+	executable in the source directory.  At this point you may copy this
+	executable to a location suitable for execution, or continue by
+	su'ing to the user you wish to install as (typically root) and
+	typing the following:
+	
+		make install
+
+	This should place enlightenment in the location you specified in
+	the Enl.tmpl file.  
+
+	If you don't have any themes installed on your system, you will
+	want to download and install the DEFAULT themes for the version
+	of enlightenment that you have downloaded, as well.  There should
+	be an enlightenment themes package in the same directory that you
+	downloaded this source distribution from.
+
+	If this is your first time installing enlightenment, you will
+	need to modify your .xinitrc file to contain the following line:
+
+		exec /usr/local/enlightenment/bin/enlightenment
+
+	in place of any other window manager startup lines.  This will
+	cause enlightenment to launch in lieu of other window managers
+	when you use the startx command (enlightenment will be
+	launched via xinit)  You may also want to add a PATH exporting
+	statement in here, to assure that your X session will have
+	a good environment for launching applications.  IE:
+
+		export PATH=$PATH:/usr/local/bin
+
+	And that's it!  just start enlightenment by launching startx.
+
+	If you're using xdm, add those lines to a .xsession file instead
+	of an .xinitrc file.  (xdm is the graphical login feature
+	present on some unix systems)
+
+INTERNET DISTRIBUTION:
+
+	Enlightenment can be found on the web via the following URLS:
+
+		http://www.enlightenment.org
+
+	It can be downloaded via ftp at:
+	
+		ftp.enlightenment.org/pub/enlightenment
+
+	Mailing list:
+	
+		See http://www.rasterman.com/mail.html for details
+
+ADDITIONAL CREDITS / SPECIAL THANKS:
+
+	Thanks goes out to everyone who ever sent in patches, bugfixes,
+	or sensible bug reports.  Enlightenment wouldn't get this far
+	without the help and support of all the users on the net.
+
+	Thanks to Jim Knoble from Redhat for the initial setup / install,
+	and patches that made enlightenment a lot easier to install.
+
+	Thanks to Ben Buxton for numerous patches (resize, restart,
+	initial mapping, resize / move info, etc)
+
+	Thanks to Michael Kellen, for the introduction of multiple focus
+	types (ClickToFocus, SloppyFocus).
+
+	Thanks to Mark Baker for the WINDOW_SHADE action, as well as the
+	beginnings of pthread support.
+
+	Thanks to Michael Jennings for throwing in his 2 cents worth
+	and also a few useful patches (like multi-itimer conflict fixes)
+
+	Thanks to Allen Wittenauer from a "Well Known Workstation
+	Manufacturer"  for a tremendous amount of cross-platform code 
+	revisions, as well as the current Imakefile scheme.
+
+	Thanks to Dan Mount for debugging support.  He helped hunt down
+	bugs in E on non-XFree86 servers.
+
+	Thanks to Sami Makela, for fixing the iconbox drag bug and also
+	a minor bug in windowlists, and a fix that helped repair problems
+	when running RealVideo
+	
+	Thanks to Rob Malda for adding Snapshotpager as well as skipwindow
+	and the next/prev actions.
+
+	And lastly thanks to all the folks on #E on EFNet (irc) for
+	putting up with all the hassle of listening to mandrake and
+	raster grumble online (and also for all sorts of bug testing
+	information)
+
+	---If you have sent in patches that are included in the
+	distribution but your name isn't here, we may have accidentally
+	left your name out - send us mail and it'll go in here.
+
+FINAL WORDS:
+
+	If you have any problems or bugs or just want to say something,
+	feel free to drop either one of us an email.  We may not get to
+	respond right away, but every bug report counts!
+
+	Enjoy!
+
+	The Rasterman (Carsten Haitzler)
+	raster@rasterman.com
+	http://www.rasterman.com
+
+	Mandrake (Geoff Harrison)
+	mandrake@mandrake.net
+	http://mandrake.net
+

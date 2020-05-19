@@ -1,0 +1,43 @@
+
+#include "../Enl.tmpl"
+
+ENLPKGDIR=ENLwm
+
+#ifdef SunArchitecture
+
+solaris_pkg:
+	@echo "Creating Solaris package..."
+	@rm -rf ./$(ENLPKGDIR) ./$(ENLPKGDIR)_SunOS`uname -r`_`uname -p`.pkg
+	@sed -e "s#@ENLDIR@#$(ENLDIR)#g" \
+		-e "s#@ENLPKGDIR@#$(ENLPKGDIR)#g" \
+		-e "s#@PSTAMP@#$(LOGNAME)_`date | tr ' ' '_'`#g" \
+		-e "s#@ARCH@#Solaris_`uname -rp | tr ' ' ','`#g" \
+		-e "s#@ENLROOT@#$(ENLROOT)#g" \
+		-e "s#@VERSION@#$(ENLVERSION)#g" \
+		./Solaris/pkginfo.in > ./Solaris/pkginfo
+	@sed -e "s#@ENLNAME@#$(ENLNAME)#g" \
+		./Solaris/prototype.in > ./Solaris/prototype
+	pkgmk -d . -b . -r .. -f ./Solaris/prototype $(ENLPKGDIR)
+	pkgtrans  -o -s . $(ENLPKGDIR)-$(ENLVERSION)_SunOS`uname -r`_`uname -p`.pkg $(ENLPKGDIR)
+
+distclean::
+	$(RM) $(ENLPKGDIR)-$(ENLVERSION)_SunOS`uname -r`_`uname -p`.pkg
+        $(RM) ./Solaris/prototype ./Solaris/preinstall ./Solaris/pkginfo
+
+clean::
+	$(RM) ./Solaris/prototype ./Solaris/pkginfo
+
+#endif
+
+all::
+
+includes::
+
+depend::
+
+clean::
+	$(RM) -rf $(ENLPKGDIR)
+
+distclean::
+	$(MAKE) $(MFLAGS) clean
+	$(RM) Makefile

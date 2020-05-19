@@ -1,0 +1,118 @@
+Preliminary CDE Support
+-----------------------
+
+	A while back, the big industry leaders in UNIX decided that
+they needed a standard desktop in order to compete with YouKnowWho.
+The product that has been born out of that consortium is called
+the Common Desktop Environment, or CDE for short.  CDE, in and
+of itself, is quite powerful allowing you to do things like 
+drag-n-drop across platforms all within the X interface.... However.
+
+	The big nightmare with CDE is that it is almost *TOO* 
+configurable--your typical System Administrator can quickly get
+lost in the various resource files that control this and control
+that.  Ask anyone who has attempted to add Enlightenment to the
+list of available "sessions."
+
+	In order to help out, I've decided to add what I've been 
+using for a while to the general distribution.  Needless to say
+it more or less works for me, but Your Mileage May Vary.  Inside this
+directory, you'll find the following:
+
+	mk_dt_e            --	/usr/dt/config Xresource builder
+
+	mk_dt_e.pre        --	same script, before site 
+                                customizations are made via imake
+
+	Xsession.patch     --	context diff to make Xsession.enl
+
+	Xsession.patch.pre --   context diff, before site 
+                                customizations
+
+	icons              --	directory full of logos for the
+				dtlogin window
+		
+	If you haven't done so yet, compile enlightement so that
+you have the mk_dt_e script and the Xsession.patch file.  Change
+the permissions on the mk_dt_e script:
+
+	chmod 4755 mk_dt_e
+	chown root mk_dt_e
+
+[Yes, it runs as setuid root so that anyone can execute it.  This
+is more for convience than purpose.]
+
+	Execute this script.  It should build several directories
+and a bunch 'o files and links in /etc/dt.  Copy this script to
+wherever enlightenment lives (/usr/local/enlightenment/bin, usually)
+and add an entry into your crontab to call this script as many times
+as you feel necessary.  
+
+	Next, grab a copy of your /usr/dt/bin/Xsession file.  For
+most OSes, this has been written so that your OS specific stuff is
+surrounded by gobs of spaces where the *OTHER* platform specific
+stuff is hiding at.  If luck is on your side, youould be able to
+just use patch to create a new file:
+
+	patch < Xsession.patch
+
+	... or something similar.  If patch doesn't work, then
+you can try hand-modifying it.  There isn't that much that needs
+to be changed, but... Anyway, call the patched Xsession file
+Xsession.enl.  Copy this file to /etc/dt/config.  Change the
+permissions:  
+
+	chmod 0755 /etc/dt/config/Xsession.enl
+	chown root /etc/dt/config/Xsession.enl
+
+	Now, copy the contents of the icons/ directory from
+here to ENLIGHTENMENTROOT/dt/icons.   These work *just* like
+CDE's normal logos: 237x237 in either xpm or xbm format. 
+Filenames are in the form: THEMENAME_logo.pm or 
+THEMENAME_logo.bm.
+
+	Once you have done all this, log in via dtlogin.  You
+should be pleasantly surprised. =)
+
+---------------------------------------------------------------
+
+***SPECIAL NOTE REGARDING LOCALES***
+
+
+	While CDE itself supports multple locales, alas, the
+current script doesn't doesn't take these into account.  The only
+change that needs to be made, really, is in mk_dt_e.  Change
+all of the C locale entries to the locale of your choice.  In theory,
+this should enable you to have locale support and theme support.
+
+	To be honest, I haven't tested this. =)
+
+----------------------------------------------------------------
+
+Technical details:
+
+	Basically, we are taking advantage of a feature of CDE:
+namely, user customizations can go in /etc/dt without affecting
+the rest of the system.  The resource files that are built are
+modeled after the ones that come with Solaris that launch the
+OpenWindows environment under CDE.  As you can see, there isn't
+really that much that is special here.	
+
+	Xsession.enl is modified so that it can take a theme
+parameter as well as starting up enlightenment rather than starting
+up whatever is mentioned as the alternate manager.  Also, all mentions
+of dthello are wiped out (usually screws up the color scheme on
+E's bootup) and all mentions of dtsession are gone--sorry.  dtsession
+is what starts up dtwm, and I simply couldn't find a way to make
+it listen to what I wanted it do.... This is why this is a preliminary
+release.  Hopefully by the time we get to 0.14, this problem will
+be licked.
+
+	The logos are done through file system magic, really.  By
+linking /etc/dt/appconfig/icons/C/<THEME>_Logo.<type> to their place
+in /usr/local/enlightenment/dt/icons, we avoid having to modify
+/usr/dt *and* we make it easy for theme authors to provide user's with
+a logo.
+
+----------------------------------------------------------------------
+The preceding has been contributed and written by Allen Wittenauer.

@@ -1,0 +1,13 @@
+d none $BASEDIR 0755 root bin
+d none $BASEDIR/bin 0755 root bin
+f none $BASEDIR/bin/@ENLNAME@=@ENLNAME@ 0755 bin bin
+d none $BASEDIR/etc 0755 root bin
+d none $BASEDIR/themes 0755 root bin
+d none $BASEDIR/lib 0755 root bin
+d none $BASEDIR/dt 0755 root bin
+f none $BASEDIR/dt/Xsession.patch=dt/Xsession.patch 0555 root other
+d none $BASEDIR/dt/bin 0755 root bin
+f none $BASEDIR/dt/bin/mk_dt_e=dt/mk_dt_e 4755 root bin
+d none $BASEDIR/dt/icons 0755 root bin
+i pkginfo
+i prototype

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for E in `find / -print | grep enlightenment` ; do
+  rm -rf $E;
+done
