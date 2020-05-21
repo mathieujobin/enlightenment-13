@@ -1,16 +1,16 @@
 #include "enlightenment.h"
 
 XErrorHandler handleError(Display *d, XErrorEvent *ev) {
-/*
- *  printf("X error trapped\n");
- *  printf("+----------------------------------------------------------\n");
- *  printf("| serial        : %x\n",ev->serial);
- *  printf("| error code    : %x\n",ev->error_code);
- *  printf("| request code  : %x\n",ev->request_code);
- *  printf("| minor code    : %x\n",ev->minor_code);
- *  printf("| resource id   : %x\n",ev->resourceid);
- *  printf("+----------------------------------------------------------\n");
- */
+
+  printf("X error trapped\n");
+  printf("+----------------------------------------------------------\n");
+  printf("| serial        : %x\n",ev->serial);
+  printf("| error code    : %x\n",ev->error_code);
+  printf("| request code  : %x\n",ev->request_code);
+  printf("| minor code    : %x\n",ev->minor_code);
+  printf("| resource id   : %x\n",ev->resourceid);
+  printf("+----------------------------------------------------------\n");
+
 	if  ((ev->request_code == X_ChangeWindowAttributes) && (ev->error_code   == BadAccess)&&(imd==NULL)) {
 		fprintf(stderr,"Another window manager is already running. Sorry.. No go mate.");
 		Alert("Another window manager is already running. Sorry.. No go mate.");
@@ -30,65 +30,90 @@ void handleEvent(XEvent *ev,listhead *l) {
 	if(FocusOut > ev->type) {
 		switch (ev->type) {
 			case KeyPress:
+				printf("| event KeyPress        : %x\n",l);
 				handleKeyDown(ev,l);
 				break;
 			case KeyRelease:
+				printf("| event KeyRelease        : %x\n",l);
 				handleKeyUp(ev,l);
 				break;
 			case ButtonPress:
+				printf("| event ButtonPress        : %x\n",l);
 				handleButtonDown(ev,l);
 				break;
 			case ButtonRelease:
+				printf("| event ButtonRelease        : %x\n",l);
 				handleButtonUp(ev,l);
 				break;
 			case MotionNotify:
+				printf("| event MotionNotify        : %x\n",l);
 				handleMotion(ev,l);
 				break;
 			case EnterNotify:
+				printf("| event EnterNotify        : %x\n",l);
 				handleEnter(ev,l);
 				break;
 			case LeaveNotify:
+				printf("| event LeaveNotify        : %x\n",l);
 				handleLeave(ev,l);
 				break;
 			case FocusIn:
+				printf("| event FocusIn        : %x\n",l);
 				handleFocusIn(ev,l);
 				break;
-			default: 
+			case NoExpose:
+				printf("| event NoExpose ...");
+				break;
+			case ColormapNotify:
+				printf("| event ColormapNotify ...");
+				break;
+			default:
+				printf("| unknown event    %d    : %x\n",ev->type, l);
 				break;
 		}
 	} else {
 		switch(ev->type) {
 			case FocusOut:
+				printf("| event FocusOut        : %x\n",l);
 				handleFocusOut(ev,l);
 				break;
 			case DestroyNotify:
+				printf("| event DestroyNotify        : %x\n",l);
 				handleDestroy(ev,l);
 				break;
 			case UnmapNotify:
+				printf("| event UnmapNotify        : %x\n",l);
 				handleUnmap(ev,l);
 				break;
 			case MapRequest:
+				printf("| event MapRequest        : %x\n",l);
 				handleMap(ev,l);
 				break;
 			case ConfigureRequest:
+				printf("| event ConfigureRequest        : %x\n",l);
 				handleConfigure(ev,l);
 				break;
 			case ResizeRequest:
+				printf("| event ResizeRequest        : %x\n",l);
 				handleResize(ev,l);
 				break;
 			case CirculateRequest:
+				printf("| event CirculateRequest        : %x\n",l);
 				handleCirculate(ev,l);
 				break;
 			case PropertyNotify:
+				printf("| event PropertyNotify        : %x\n",l);
 				handleProperty(ev,l);
 				break;
 			case ClientMessage:
+				printf("| event ClientMessage        : %x\n",l);
 				handleClientMessage(ev, l);
 				break;
-			default: 
+			default:
+				printf("| unknown event    %d    : %x\n",ev->type, l);
 				break;
 		}
-	} 
+	}
 }
 
 void handleKeyDown(XEvent *ev,listhead *l) {
@@ -213,7 +238,7 @@ void handleButtonDown(XEvent *ev,listhead *l) {
 void handleButtonUp(XEvent *ev,listhead *l)
 {
    /* Menu *m; */
-   
+
 	if (evmd.ewin) evmd.ewin->subwin_state[evmd.wbtn]=NORM;
 	if (evmd.mode==MODE_MENU) {
 		if ((tmp_menu)&&(tmp_menu->sel_item>=0))
@@ -273,7 +298,7 @@ void handleMotion(XEvent *ev,listhead *l) {
 	XQueryPointer(disp,root,&dummyw,&focwin,&mouse_x,&mouse_y,&dummy,&dummy,&dummyui);
 	switch(evmd.mode) {
 		case MODE_NORMAL:
-			if(cfg.focus_policy!=ClickToFocus) 
+			if(cfg.focus_policy!=ClickToFocus)
 				if (FocusWin != focwin)
 					FocWin(focwin,0);
 			return;
@@ -285,7 +310,7 @@ void handleMotion(XEvent *ev,listhead *l) {
 			Draw_Cursor(evmd.ewin, x, y, '+', 0);
 			ModifyEWin(evmd.ewin,x,y,evmd.ewin->client_width,evmd.ewin->client_height);
 			evmd.px=sx;
-			evmd.py=sy; 
+			evmd.py=sy;
 			break;
 		case MODE_RESIZE:
 			/* if (XCheckTypedEvent(disp,MotionNotify,&xev)) return; */
@@ -337,7 +362,7 @@ void handleMotion(XEvent *ev,listhead *l) {
 				evmd.py+=wy;
 			}
 			break;
-		case MODE_MENU: 
+		case MODE_MENU:
 			{
 				Menu *m;
 				Menu *mm;
@@ -355,7 +380,7 @@ void handleMotion(XEvent *ev,listhead *l) {
 						if (m->items[i]->win==w2) {
 							selected=1;
 							if (m->sel_item!=i) {
-								if (m->sel_item>=0) 
+								if (m->sel_item>=0)
 									DrawMenuItem(m,m->sel_item,0);
 								DrawMenuItem(m,i,1);
 								m->sel_item=i;
@@ -440,7 +465,7 @@ void handleUnmap(XEvent *ev,listhead *l) {
 	EWin *ewin;
 	tmp_win=ev->xunmap.event;
 	if ((ewin=ListGetWinID(l,tmp_win))&& (ewin->state&MAPPED)) {
-		/* if its a client and the frame was mapped then */ 
+		/* if its a client and the frame was mapped then */
 		XUnmapWindow(disp,ewin->client_win); /* unmap the frame */
 		XUnmapWindow(disp,ewin->frame_win); /* unmap the frame */
 		if (fx.shadow.on) XUnmapWindow(disp,ewin->fx.shadow_win);
@@ -476,7 +501,7 @@ void handleMap(XEvent *ev,listhead *l) {
 	if (tmp_win==icfg.left_win) return;
 	if (tmp_win==icfg.right_win) return;
 	if (!(ewin=ListGetClientWinID(l,tmp_win))) {
-		ewin=InitEWin(tmp_win); 
+		ewin=InitEWin(tmp_win);
 		if (cfg.focus_policy==ClickToFocus) {
 			FocWin(tmp_win,1);
 			XSync(disp,False);
@@ -514,8 +539,8 @@ void handleReparent(XEvent *ev,listhead *l) {
 
 	tmp_win=ev->xreparent.window;
 	if (ListGetClientWinID(l,tmp_win)) {
-		if (!(ewin=ListGetWinID(l,ev->xreparent.parent))) 
-			ListDelWinID(l,ewin->frame_win); 
+		if (!(ewin=ListGetWinID(l,ev->xreparent.parent)))
+			ListDelWinID(l,ewin->frame_win);
 	}
 }
 
@@ -527,18 +552,18 @@ void handleConfigure(XEvent *ev,listhead *l) {
 	int mask;
 	tmp_win=ev->xconfigurerequest.window;
 	ewin=ListGetClientWinID(l,tmp_win);
-	if (ewin) {	
+	if (ewin) {
 		x=ewin->frame_x;
 		y=ewin->frame_y;
 		w=ewin->client_width;
 		h=ewin->client_height;
-		if (ev->xconfigurerequest.value_mask&CWX) 
+		if (ev->xconfigurerequest.value_mask&CWX)
 			x=ev->xconfigurerequest.x;
-		if (ev->xconfigurerequest.value_mask&CWY) 
+		if (ev->xconfigurerequest.value_mask&CWY)
 			y=ev->xconfigurerequest.y;
-		if (ev->xconfigurerequest.value_mask&CWWidth) 
+		if (ev->xconfigurerequest.value_mask&CWWidth)
 			w=ev->xconfigurerequest.width;
-		if (ev->xconfigurerequest.value_mask&CWHeight) 
+		if (ev->xconfigurerequest.value_mask&CWHeight)
 			h=ev->xconfigurerequest.height;
 		GetWinName(tmp_win,ewin->title);
 		ewin->changes|=MOD_TITLE;
@@ -550,13 +575,13 @@ void handleConfigure(XEvent *ev,listhead *l) {
 		val.width=ev->xconfigurerequest.width;
 		val.height=ev->xconfigurerequest.height;
 		mask=0;
-		if (ev->xconfigurerequest.value_mask&CWX) 
+		if (ev->xconfigurerequest.value_mask&CWX)
 			mask|=CWX;
-		if (ev->xconfigurerequest.value_mask&CWY) 
+		if (ev->xconfigurerequest.value_mask&CWY)
 			mask|=CWY;
-		if (ev->xconfigurerequest.value_mask&CWWidth) 
+		if (ev->xconfigurerequest.value_mask&CWWidth)
 			mask|=CWWidth;
-		if (ev->xconfigurerequest.value_mask&CWHeight) 
+		if (ev->xconfigurerequest.value_mask&CWHeight)
 			mask|=CWHeight;
 		XConfigureWindow(disp,tmp_win,mask,&val);
 	}
@@ -581,7 +606,7 @@ void handleResize(XEvent *ev,listhead *l) {
 
 	tmp_win=ev->xresizerequest.window;
 	ewin=ListGetClientWinID(l,tmp_win);
-	if (ewin) {	
+	if (ewin) {
 		x=ewin->frame_x;
 		y=ewin->frame_y;
 		w=ev->xresizerequest.width;
@@ -622,14 +647,14 @@ void handleProperty(XEvent *ev,listhead *l) {
 			case XA_WM_HINTS:
 				state=ewin->state;
 				GetWinSize(tmp_win,ewin);
-				if (state!=ewin->state) 
+				if (state!=ewin->state)
 					ewin->changes|=MOD_STATE;
 				DrawWindowBorder(ewin);
 				break;
 			case XA_WM_NORMAL_HINTS:
 				state=ewin->state;
 				GetWinSize(tmp_win,ewin);
-				if (state!=ewin->state) 
+				if (state!=ewin->state)
 					ewin->changes|=MOD_STATE;
 				DrawWindowBorder(ewin);
 				break;
@@ -661,7 +686,7 @@ void FocWin(Window tmp_win, int clk) {
 	BWin *bwin;
 	struct itimerval tv1,tv2;
 
-	if (cfg.focus_policy!=ClickToFocus) 
+	if (cfg.focus_policy!=ClickToFocus)
 		clk=1;
 	raisewin=0;
 	if (FocusWin) /* if there was a previous focus win */ {
@@ -718,7 +743,7 @@ void FocWin(Window tmp_win, int clk) {
 		/* if the new focus win is root */
 		FocusWin2=0; /* change the focus to the new window */
 		FocusWin=0; /* nullify the focus... so all windows */
-		XInstallColormap(disp,root_cmap);		  
+		XInstallColormap(disp,root_cmap);
 		XSetInputFocus(disp,root,RevertToNone,CurrentTime);
 		return; /* are unfocused..... */
 	}
@@ -728,9 +753,9 @@ void FocWin(Window tmp_win, int clk) {
 		if (clk) {
 			FocusWin=tmp_win; /* change the focus to the new window */
 			ewin->state|=SELECTED; /* focus it */
-			if (ewin->colormap) 
+			if (ewin->colormap)
 				XInstallColormap(disp,ewin->colormap);
-			else 
+			else
 				XInstallColormap(disp,root_cmap);
 			ewin->changes|=MOD_SELECT;
 			UnGrabTheButtons(ewin->client_win);
@@ -743,9 +768,9 @@ void FocWin(Window tmp_win, int clk) {
 
 				ifb.nodo=1;
 				if (timer_mode < TIMER_AUTORAISE) {
-					for (getitimer(ITIMER_REAL, &tv1); 
-						tv1.it_value.tv_sec != 0 || tv1.it_value.tv_usec != 0 
-						|| tv1.it_interval.tv_sec != 0 || 
+					for (getitimer(ITIMER_REAL, &tv1);
+						tv1.it_value.tv_sec != 0 || tv1.it_value.tv_usec != 0
+						|| tv1.it_interval.tv_sec != 0 ||
 						tv1.it_interval.tv_usec != 0;
 					   	getitimer(ITIMER_REAL, &tv1));
 				}
