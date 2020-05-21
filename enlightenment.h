@@ -71,6 +71,7 @@
  */
 #define MAX_WIDTH 2048
 #define MAX_HEIGHT 1536
+#define VERSION "0.13.3"
 
 /*
  * This is where enlightenment will look if it can't find config files in
