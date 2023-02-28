@@ -8,14 +8,66 @@ XErrorHandler handleError(Display *d, XErrorEvent *ev) {
   printf("| error code    : %x\n",ev->error_code);
   printf("| request code  : %x\n",ev->request_code);
   printf("| minor code    : %x\n",ev->minor_code);
-  printf("| resource id   : %x\n",ev->resourceid);
-  printf("+----------------------------------------------------------\n");
 
 	if  ((ev->request_code == X_ChangeWindowAttributes) && (ev->error_code   == BadAccess)&&(imd==NULL)) {
 		fprintf(stderr,"Another window manager is already running. Sorry.. No go mate.");
 		Alert("Another window manager is already running. Sorry.. No go mate.");
 		EExit(1);
+	} else switch (ev->error_code) {
+		case BadRequest: // 1
+			printf("| error name    : BadRequest\n");
+			break;
+		case BadValue: // 2
+			printf("| error name    : BadValue\n");
+			break;
+		case BadWindow: // 3
+			printf("| error name    : BadWindow\n");
+			break;
+		case BadPixmap: // 4
+			printf("| error name    : BadPixmap\n");
+			break;
+		case BadAtom: // 5
+			printf("| error name    : BadAtom\n");
+			break;
+		case BadCursor: // 6
+			printf("| error name    : BadCursor\n");
+			break;
+		case BadFont: // 7
+			printf("| error name    : BadFont\n");
+			break;
+		case BadMatch: // 8
+			printf("| error name    : BadMatch\n");
+			break;
+		case BadDrawable: // 9
+			printf("| error name    : BadDrawable\n");
+			break;
+		case BadAccess: // 10
+			printf("| error name    : BadAccess\n");
+			break;
+		case BadAlloc: // 11
+			printf("| error name    : BadAlloc\n");
+			break;
+		case BadColor: // 12
+			printf("| error name    : BadColor\n");
+			break;
+		case BadGC: // 13
+			printf("| error name    : BadGC\n");
+			break;
+		case BadIDChoice: // 14
+			printf("| error name    : BadIDChoice\n");
+			break;
+		case BadName: // 15
+			printf("| error name    : BadName\n");
+			break;
+		case BadLength: // 16
+			printf("| error name    : BadLength\n");
+			break;
+		case BadImplementation: // 17
+			printf("| error name    : BadImplementation\n");
+			break;
 	}
+	printf("| resource id   : %x\n",ev->resourceid);
+	printf("+----------------------------------------------------------\n");
 	return 0;
 }
 
@@ -27,90 +79,114 @@ XIOErrorHandler handleIOError(Display *d) {
 }
 
 void handleEvent(XEvent *ev,listhead *l) {
-	if(FocusOut > ev->type) {
+	if(FocusOut >= ev->type) {
 		switch (ev->type) {
-			case KeyPress:
-				printf("| event KeyPress        : %x\n",l);
+			case KeyPress: // 2
+				printf("| handleKeyDown KeyPress        : %x\n",l);
 				handleKeyDown(ev,l);
 				break;
-			case KeyRelease:
-				printf("| event KeyRelease        : %x\n",l);
+			case KeyRelease: // 3
+				printf("| handleKeyUp KeyRelease        : %x\n",l);
 				handleKeyUp(ev,l);
 				break;
-			case ButtonPress:
-				printf("| event ButtonPress        : %x\n",l);
+			case ButtonPress: // 4
+				// printf("| handleButtonDown ButtonPress        : %x\n",l);
 				handleButtonDown(ev,l);
 				break;
-			case ButtonRelease:
-				printf("| event ButtonRelease        : %x\n",l);
+			case ButtonRelease: // 5
+				// printf("| handleButtonUp ButtonRelease        : %x\n",l);
 				handleButtonUp(ev,l);
 				break;
-			case MotionNotify:
-				printf("| event MotionNotify        : %x\n",l);
+			case MotionNotify: // 6
+				// printf("| handleMotion MotionNotify        : %x\n",l);
 				handleMotion(ev,l);
 				break;
-			case EnterNotify:
-				printf("| event EnterNotify        : %x\n",l);
+			case EnterNotify: // 7
+				//printf("| handleEnter EnterNotify        : %x\n",l);
 				handleEnter(ev,l);
 				break;
-			case LeaveNotify:
-				printf("| event LeaveNotify        : %x\n",l);
+			case LeaveNotify: //8
+				//printf("| handleLeave LeaveNotify        : %x\n",l);
 				handleLeave(ev,l);
 				break;
-			case FocusIn:
-				printf("| event FocusIn        : %x\n",l);
+			case FocusIn: // 9
+				// printf("| handleFocusIn FocusIn        : %x\n",l);
 				handleFocusIn(ev,l);
 				break;
-			case NoExpose:
-				printf("| event NoExpose ...");
-				break;
-			case ColormapNotify:
-				printf("| event ColormapNotify ...");
+			case FocusOut: // 10
+				// printf("| handleFocusOut FocusOut        : %x\n",l);
+				handleFocusOut(ev,l);
 				break;
 			default:
-				printf("| unknown event    %d    : %x\n",ev->type, l);
+				printf("| impossible event (0/1) are reserved for errors and replies (%d : %x\n",ev->type, l);
 				break;
 		}
 	} else {
 		switch(ev->type) {
-			case FocusOut:
-				printf("| event FocusOut        : %x\n",l);
-				handleFocusOut(ev,l);
+			case KeymapNotify: // 11
+				// printf("| NoOp event KeymapNotify ...\n");
 				break;
-			case DestroyNotify:
-				printf("| event DestroyNotify        : %x\n",l);
+			case Expose: // 12
+				// printf("| NoOp event Expose ...\n");
+				break;
+			case GraphicsExpose: // 13
+				// printf("| NoOp event GraphicsExpose ...\n");
+				break;
+			case NoExpose: // 14
+				// printf("| NoOp event NoExpose ...");
+				break;
+			case VisibilityNotify: // 15
+				// printf("| NoOp event VisibilityNotify ...\n");
+				break;
+			case CreateNotify: // 16
+				// printf("| NoOp event CreateNotify ...\n");
+				break;
+			case DestroyNotify: //17
+				// printf("| handleDestroy DestroyNotify        : %x\n",l);
 				handleDestroy(ev,l);
 				break;
-			case UnmapNotify:
-				printf("| event UnmapNotify        : %x\n",l);
+			case UnmapNotify: //18
+				printf("| handleUnmap (dup) UnmapNotify        : %x\n",l);
+				handleUnmap(ev,l);
 				handleUnmap(ev,l);
 				break;
-			case MapRequest:
-				printf("| event MapRequest        : %x\n",l);
+			case MapNotify: //19
+				// printf("| NoOp event MapNotify        : %x\n",l);
+				break;
+			case MapRequest: // 20
+				printf("| handleMap MapRequest        : %x\n",l);
 				handleMap(ev,l);
 				break;
-			case ConfigureRequest:
-				printf("| event ConfigureRequest        : %x\n",l);
+			case ReparentNotify: // 21
+				break;
+			case ConfigureNotify: // 22
+				break;
+			case ConfigureRequest: // 23
+				printf("| handleConfigure ConfigureRequest        : %x\n",l);
 				handleConfigure(ev,l);
 				break;
-			case ResizeRequest:
-				printf("| event ResizeRequest        : %x\n",l);
+			case ResizeRequest: // 25
+				printf("| handleResize ResizeRequest        : %x\n",l);
 				handleResize(ev,l);
 				break;
-			case CirculateRequest:
-				printf("| event CirculateRequest        : %x\n",l);
+			case CirculateRequest: // 27
+				printf("| handleCirculate CirculateRequest        : %x\n",l);
 				handleCirculate(ev,l);
 				break;
-			case PropertyNotify:
-				printf("| event PropertyNotify        : %x\n",l);
+			case PropertyNotify: // 28
+				printf("| dup handleProperty PropertyNotify        : %x\n",l);
+				handleProperty(ev,l);
 				handleProperty(ev,l);
 				break;
-			case ClientMessage:
-				printf("| event ClientMessage        : %x\n",l);
+			case ColormapNotify: // 32
+				// printf("| NoOp event ColormapNotify ...\n");
+				break;
+			case ClientMessage: // 33
+				printf("| handleClientMessage ClientMessage        : %x\n",l);
 				handleClientMessage(ev, l);
 				break;
 			default:
-				printf("| unknown event    %d    : %x\n",ev->type, l);
+				printf("| unknown event (FocusOut < ...)   %d    : %x\n",ev->type, l);
 				break;
 		}
 	}
