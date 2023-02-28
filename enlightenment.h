@@ -159,7 +159,10 @@ struct sigaction
 typedef struct ewn EWin;
 typedef struct icn Icon;
 
-Atom WM_STATE;
+#ifndef WM_STATE_DEFINED
+#define WM_STATE_DEFINED
+extern Atom WM_STATE;
+#endif
 
 struct icn
 {

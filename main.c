@@ -1,5 +1,7 @@
 #include "enlightenment.h"
 
+Atom WM_STATE;
+
 /* this just cleans up after dead child processes.... */
 void Reap() {
 	int status;
