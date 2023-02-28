@@ -26,10 +26,10 @@
 /* Some Xservers have a broken XQueryBestCursor function. You'll know this if
  * your cursor looks like  garbled mess whenever you move or resize windows
  * or if your server goes down in a ball of flames when you move or resize.
- * Report this bug to your Xserver vendors. This is a workaround. Uncomment it 
- * and maybe fiddle with the width & height defines until it works. (common 
+ * Report this bug to your Xserver vendors. This is a workaround. Uncomment it
+ * and maybe fiddle with the width & height defines until it works. (common
  * sizes are 64x64, 32x32 and 16x16 )
- * 
+ *
  * #define BROKEN_XSERVER
  * #define CURSOR_MAX_WIDTH  64
  * #define CUSROS_MAX_HEIGHT 64
@@ -133,11 +133,10 @@
 #define ClickToFocus	2
 
 /* Timer mode constants */
- 
 #define TIMER_NONE          0
 #define TIMER_INFOBOX       1
 #define TIMER_ICONIFY       2
-#define TIMER_AUTORAISE     3 
+#define TIMER_AUTORAISE     3
 #define TIMER_SNAPSHOTPAGER 4
 
 /*
@@ -148,12 +147,12 @@
 #ifdef SOLARIS_SUX
 typedef void (*__sighandler_t)(int);
 typedef unsigned long sigset_t;
-struct sigaction  
+struct sigaction
 {
    int sa_flags;
    void (*sa_handler)();
    sigset_t sa_mask;
-   int sa_resv[2];  
+   int sa_resv[2];
 };
 #endif
 
@@ -182,7 +181,6 @@ struct ewn
    Window icon_win;
    int state;
    char title[256];
-   
    int changes;
    Colormap colormap;
    int frame_x;
@@ -224,7 +222,7 @@ struct ewn
    int prev_client_height;
    int top;
    Icon *icon;
-   struct 
+   struct
      {
 	Window shadow_win;
      } fx;
@@ -328,7 +326,7 @@ typedef struct
 
 typedef struct
 {
-   struct 
+   struct
      {
 	int on;
 	int x;

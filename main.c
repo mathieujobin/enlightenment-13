@@ -14,7 +14,6 @@ void err(char *s) {
 void X_Connect(void)
 {
    XWindowAttributes xwa;
-   
    disp=XOpenDisplay(NULL); /* open the display connection */
    if (disp==NULL) /* if we couldn't open the connection.. error */
      {
@@ -54,13 +53,12 @@ Image *LoadImage(ImlibData *d, char *file, ImColor *icl)
    int x,y;
    int a,b,c;
    int load_err;
-   
    im=NULL;
    load_err=0;
    ss[0]=0;
    if (!file) return NULL;
    if (!d) return NULL;
-   if (file[0]!='/') 
+   if (file[0]!='/')
      {
 	     sprintf(ss,".enlightenment/%s",file);
 	     if (!exists(ss))
@@ -80,14 +78,13 @@ Image *LoadImage(ImlibData *d, char *file, ImColor *icl)
 	       }
 	  }
      }
-   else 
+   else
      strcpy(ss,file);
    if (!load_err) im=Imlib_load_image(d,ss);
    if ((!im)&&(!load_err))
      Alert("Holy Carumba! Geez oh crikey!\nI couldn't for the life of me load %s\nI'll probably run screaming off in a fit of rage now...\n",ss);
    if (!im)
      {
-	
 	im=malloc(sizeof(Image));
 	im->rgb_width=50;
 	im->rgb_height=50;
@@ -139,7 +136,6 @@ void main(int argc, char **argv) {
    states=0;
    statefile[0]=0;
    AlreadyWinListed=0;
-   
    sa.sa_handler = Reap;
    sa.sa_flags = 0;
    sigemptyset (&sa.sa_mask);
@@ -194,7 +190,7 @@ void main(int argc, char **argv) {
 	/* printf("%s\n",argv[j]); */
 	if (!strcmp("-debug",argv[j])) debug_mode=1;
 	else if (!strcmp("-restart",argv[j])) restart=1;
-	else if ((!strcmp("-theme",argv[j]))&&((argc-j)>1)) 
+	else if ((!strcmp("-theme",argv[j]))&&((argc-j)>1))
 	  {
 	     strcpy(Theme_Tar_Ball,argv[j+1]);
 	     strcpy(Theme_Name,Theme_Tar_Ball);
@@ -268,16 +264,16 @@ void main(int argc, char **argv) {
      }
    argv1=malloc(strlen(argv[0])+1);
    strcpy(argv1, argv[0]);
-   
+
    X_Connect(); /* connect to the display nominated */
    imd=ImlibInit(disp); /* Inititalise Imlib..... */
    if (!imd) /* uh oh.. problems... imlib had a bad day... */
-     { 
+     {
 	fprintf(stderr,"FATAL.... cannot initialise Imlib!!! Outa here!\n");
 	Alert("FATAL ERROR!\n Cannot initialise Imlib!\n Quitting.\n");
 	EExit(1);
      }
-   depth=imd->x.depth; 
+   depth=imd->x.depth;
    visual=imd->x.visual;
    l=ListInit(); /* initialise the window list */
    WM_STATE=XInternAtom(disp,"WM_STATE", False);
@@ -303,11 +299,11 @@ void main(int argc, char **argv) {
 	  {
 	     struct sigaction sa;
 	     struct itimerval tv1,tv2;
-	     
+
 	     if (timer_mode < TIMER_INFOBOX) {
 	       for (getitimer(ITIMER_REAL, &tv1);
 		    tv1.it_value.tv_sec != 0 || tv1.it_value.tv_usec != 0
-		      || tv1.it_interval.tv_sec != 0 
+		      || tv1.it_interval.tv_sec != 0
 		      || tv1.it_interval.tv_usec != 0;
 		    getitimer(ITIMER_REAL, &tv1));
 	     }

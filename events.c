@@ -238,7 +238,6 @@ void handleButtonDown(XEvent *ev,listhead *l) {
 void handleButtonUp(XEvent *ev,listhead *l)
 {
    /* Menu *m; */
-
 	if (evmd.ewin) evmd.ewin->subwin_state[evmd.wbtn]=NORM;
 	if (evmd.mode==MODE_MENU) {
 		if ((tmp_menu)&&(tmp_menu->sel_item>=0))
