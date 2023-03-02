@@ -146,8 +146,7 @@ void handleEvent(XEvent *ev,listhead *l) {
 				handleDestroy(ev,l);
 				break;
 			case UnmapNotify: //18
-				printf("| handleUnmap (dup) UnmapNotify        : %x\n",l);
-				handleUnmap(ev,l);
+				printf("| handleUnmap (ok) UnmapNotify        : %x\n",l);
 				handleUnmap(ev,l);
 				break;
 			case MapNotify: //19
@@ -174,8 +173,7 @@ void handleEvent(XEvent *ev,listhead *l) {
 				handleCirculate(ev,l);
 				break;
 			case PropertyNotify: // 28
-				printf("| dup handleProperty PropertyNotify        : %x\n",l);
-				handleProperty(ev,l);
+				printf("| handleProperty PropertyNotify        : %x\n",l);
 				handleProperty(ev,l);
 				break;
 			case ColormapNotify: // 32
