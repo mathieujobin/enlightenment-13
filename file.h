@@ -5,6 +5,7 @@ int isdir(char *s);
 char **ls(char *d, int *num);
 void rmls(char **l, int num);
 void rm(char *s);
+void rmrf(char *s);
 time_t moddate(char *s);
 int filesize(char *s);
 void cd(char *s);

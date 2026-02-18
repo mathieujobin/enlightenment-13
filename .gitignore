@@ -1,0 +1,7 @@
+*.o
+*.a
+*.so
+*.so.*
+e13
+test_fixes
+test_fixes.c

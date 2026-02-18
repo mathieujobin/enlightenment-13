@@ -64,12 +64,14 @@ void ToBack(EWin *ewin) {
 
 void ListKill(listhead *l) {
 	struct list *node;
+	struct list *next_node;
 
 	node=l->first;
 	while(node) {
+		next_node=node->next;
 		KillEWin(node->win);
-		node=node->next;
 		free(node);
+		node=next_node;
 	}
 	free(l);
 }

@@ -24,11 +24,8 @@ Window CreateWin(Window par,int x, int y, int w, int h) {
 }
 
 void EExit(int code) {
-	char s[1024];
-
 	if ((Theme_Path[0])&&(!nodel)) {
-		sprintf(s,"rm -rf %s",Theme_Path);
-		system(s); 
+		rmrf(Theme_Path);
 	}
 	if (code!=99) {
 		XUngrabServer(disp);
@@ -47,7 +44,8 @@ void Segfault() {
 	/* I have changed this, so now E will ignore Segfaults and keep working */
 	/* since you may lose work and clients if it exits.*/
 	/* This is merely for robustness sake */
-	s=malloc(272+sizeof(VERSION));
+	s=malloc(272+strlen(VERSION)+1);
+	if (!s) return;
 	sprintf(s,"Enlightenment version %s\nThe system has caused a Segmentation Fault\nThis ismost likely the result\nof a misassigned pointer or reference.\n\nIf possible, please note the steps\nthat led you to this exact segmentation fault\nand send mail\nto: mandrake@mandrake.net\n",VERSION);
 	Alert(s);
 	free(s);
@@ -92,7 +90,8 @@ void FloatError() {
 	/* Yup. a Floating Point Error.. most probably cause by a divide by 0 */
 	/* Ignore it.... */
 	char *s;
-	s = malloc(165+sizeof(VERSION));
+	s = malloc(165+strlen(VERSION)+1);
+	if (!s) return;
 	sprintf(s,"Enlightenment version %s\nA Floating Point Error has occured.\nThis is most likely\nthe result of division by zero.\n\nE can most likely continue to\nrun smoothly.\n",VERSION);
 	Alert(s);
 	free(s);

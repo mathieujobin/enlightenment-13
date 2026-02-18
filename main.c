@@ -29,14 +29,25 @@ void X_Connect(void)
    /* now get some imperative info about the display */
    screen=DefaultScreen(disp); /* the screen number */
    root=DefaultRootWindow(disp); /* the root window id */
+   if (!root) {
+	fprintf(stderr, "Enlightenment: cannot get root window\n");
+	EExit(1);
+   }
+   /* Verify root window is accessible */
+   if (!XGetWindowAttributes(disp,root,&xwa)) {
+	fprintf(stderr, "Enlightenment: root window not accessible\n");
+	EExit(1);
+   }
    visual=DefaultVisual(disp,screen); /* the visual type */
    depth=DefaultDepth(disp,screen); /* the depth of the screen in bpp */
    scr_width=DisplayWidth(disp,screen); /* the width of the screen */
    scr_height=DisplayHeight(disp,screen); /* height of the screen */
+   XSync(disp,False);
    XSelectInput(disp,root,SubstructureNotifyMask|ButtonPressMask|
 		ButtonReleaseMask|EnterWindowMask|LeaveWindowMask|
 		ButtonMotionMask|PropertyChangeMask|SubstructureRedirectMask|
 		KeyPressMask|KeyReleaseMask|PointerMotionMask);
+   XSync(disp,False);
    if (!debug_mode) UnmapClients(1);
    /* set up an apporpriate event mask */
    if (XGetWindowAttributes(disp,root,&xwa))
@@ -45,6 +56,8 @@ void X_Connect(void)
 	else root_cmap=0;
      }
    else root_cmap=0;
+   fprintf(stderr, "Enlightenment: connected to display %s (screen %d, %dx%d)\n",
+	   XDisplayName(NULL), screen, scr_width, scr_height);
 }
 
 Image *LoadImage(ImlibData *d, char *file, ImColor *icl)
