@@ -1,4 +1,5 @@
 #include "enlightenment.h"
+#include <errno.h>
 
 void md(char *s) {
 	if ((!s)||(!*s)) 
@@ -76,7 +77,7 @@ char **ls(char *dir, int *num) {
 		if (!dp) 
 			break;
 		names[i]=(char *)malloc(strlen(dp->d_name)+1);
-		if (!names)  {
+		if (!names[i])  {
 			Alert("Yiperz.. ran out of memory allocating ram for ls call!\n");
 			EExit(1);
 		}
@@ -106,6 +107,36 @@ void rm(char *s) {
 	unlink(s);
 }
 
+void rmrf(char *s) {
+	char **names;
+	char path[4096];
+	int i, num;
+	
+	if ((!s)||(!*s)) 
+		return;
+	if (!exists(s))
+		return;
+	
+	if (isfile(s)) {
+		unlink(s);
+		return;
+	}
+	
+	if (isdir(s)) {
+		names = ls(s, &num);
+		if (names) {
+			for (i = 0; i < num; i++) {
+				if (strcmp(names[i], ".") && strcmp(names[i], "..")) {
+					snprintf(path, sizeof(path), "%s/%s", s, names[i]);
+					rmrf(path);
+				}
+			}
+			rmls(names, num);
+		}
+		rmdir(s);
+	}
+}
+
 void mv(char *s, char *ss) {
 	if ((!s)||(!ss)||(!*s)||(!*ss)) 
 		return;
@@ -115,7 +146,8 @@ void mv(char *s, char *ss) {
 void cp(char *s, char *ss) {
 	int i;
 	FILE *f,*ff;
-	unsigned char buf[1];
+	unsigned char buf[4096];
+	size_t n;
 
 	if ((!s)||(!ss)||(!*s)||(!*ss)) 
 		return;
@@ -130,8 +162,8 @@ void cp(char *s, char *ss) {
 		fclose(f);
 		return;
 	}
-	while (fread(buf,1,1,f)) 
-		fwrite(buf,1,1,ff);
+	while ((n = fread(buf,1,sizeof(buf),f)) > 0) 
+		fwrite(buf,1,n,ff);
 	fclose(f);
 	fclose(ff);
 }
@@ -141,7 +173,7 @@ time_t moddate(char *s) {
 
 	if ((!s)||(!*s)) 
 		return 0;
-	if (!stat(s,&st)) 
+	if (stat(s,&st) != 0) 
 		return 0;
 	if (st.st_mtime>st.st_ctime) 
 		return st.st_mtime;
@@ -154,7 +186,7 @@ int filesize(char *s) {
 
 	if ((!s)||(!*s)) 
 		return 0;
-	if (!stat(s,&st)) 
+	if (stat(s,&st) != 0) 
 		return 0;
 	return (int)st.st_size;
 }
@@ -166,5 +198,22 @@ void cd(char *s) {
 }
 
 char *cwd(void) {
-	return getcwd(NULL,-1);
+	char *buf;
+	size_t size = 1024;
+	
+	buf = malloc(size);
+	if (!buf)
+		return NULL;
+	
+	while (getcwd(buf, size) == NULL) {
+		if (errno != ERANGE) {
+			free(buf);
+			return NULL;
+		}
+		size *= 2;
+		buf = realloc(buf, size);
+		if (!buf)
+			return NULL;
+	}
+	return buf;
 }

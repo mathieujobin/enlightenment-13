@@ -12,7 +12,15 @@ void SetRoot(void) {
 		return;
 	strcpy(cfg.root_pname,desk.background[desk.current]);
 	root_im=LoadImage(imd,cfg.root_pname,NULL);
-	XGetGeometry(disp,root,&wdummy,&dummy,&dummy,&w,&h,&dummyui,&dummyui);
+	if (!root_im) {
+		fprintf(stderr,"Error: Failed to load root background image: %s\n",cfg.root_pname);
+		return;
+	}
+	if (!XGetGeometry(disp,root,&wdummy,&dummy,&dummy,&w,&h,&dummyui,&dummyui)) {
+		fprintf(stderr,"Error: Failed to get root window geometry\n");
+		ImlibDestroyImage(imd,root_im);
+		return;
+	}
 	if (desk.bg_width[desk.current]==0) 
 		im_w=root_im->rgb_width;
 	else if (desk.bg_width[desk.current]==-1) 
@@ -24,9 +32,14 @@ void SetRoot(void) {
 	else if (desk.bg_height[desk.current]==-1) 
 		im_h=h;
 	else 
-		im_w=desk.bg_height[desk.current];
+		im_h=desk.bg_height[desk.current];
 	ImlibRender(imd,root_im,im_w,im_h);
 	pmap=ImlibMoveImageToPixmap(imd,root_im);
+	if (!pmap) {
+		fprintf(stderr,"Error: Failed to create pixmap from root image\n");
+		ImlibDestroyImage(imd,root_im);
+		return;
+	}
 	if (desk.di[desk.current].root_pmap) 
 		ImlibFreePixmap(imd,desk.di[desk.current].root_pmap);
 	ImlibRender(imd,root_im,(desk.di[desk.current].root_width*im_w)/w,

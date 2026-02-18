@@ -48,16 +48,12 @@ void Do_Exec(char *line) {
 }
 
 void Do_Exit() {
-	char *s;
-	s = malloc(strlen(Theme_Path)+8);
 	if ((Theme_Path[0])&&(!nodel)) {
-		sprintf(s,"rm -rf %s",Theme_Path);
-		system(s); 
+		rmrf(Theme_Path);
 	}
 	XSetInputFocus(disp, PointerRoot, RevertToPointerRoot, CurrentTime);
 	XSelectInput(disp, root, 0);
 	MapClients(global_l);
-	free(s);
 	exit(0);
 }
 
@@ -65,8 +61,7 @@ void Do_Restart() {
 	char s[2048];
 
 	if ((Theme_Path[0])&&(!nodel)) {
-		sprintf(s,"rm -rf %s",Theme_Path);
-		system(s); 
+		rmrf(Theme_Path);
 	}
 	restart=1;
 	WriteAllWindowStates();
@@ -208,10 +203,10 @@ void Do_ChangeMouseCursor(char *newcursor) {
 
 void Do_Restart_Theme(char *file) {
 	char *s;
-	s = malloc(strlen(Theme_Path)+strlen(argv1)+18);
+	s = malloc(strlen(argv1)+18+strlen(file)+1);
+	if (!s) return;
 	if ((Theme_Path[0])&&(!nodel)) {
-		sprintf(s,"rm -rf %s",Theme_Path);
-		system(s); 
+		rmrf(Theme_Path);
 	}
 	sprintf(s,"%s -restart -theme %s",argv1,file);
 	restart=1;
