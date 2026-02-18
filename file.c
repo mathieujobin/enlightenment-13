@@ -77,7 +77,7 @@ char **ls(char *dir, int *num) {
 		if (!dp) 
 			break;
 		names[i]=(char *)malloc(strlen(dp->d_name)+1);
-		if (!names[i])  {
+		if (!names[i]) {
 			Alert("Yiperz.. ran out of memory allocating ram for ls call!\n");
 			EExit(1);
 		}

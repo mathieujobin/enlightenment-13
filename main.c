@@ -30,12 +30,12 @@ void X_Connect(void)
    screen=DefaultScreen(disp); /* the screen number */
    root=DefaultRootWindow(disp); /* the root window id */
    if (!root) {
-	fprintf(stderr,"Enlightenment: cannot get root window\n");
+	fprintf(stderr, "Enlightenment: cannot get root window\n");
 	EExit(1);
    }
    /* Verify root window is accessible */
    if (!XGetWindowAttributes(disp,root,&xwa)) {
-	fprintf(stderr,"Enlightenment: root window not accessible\n");
+	fprintf(stderr, "Enlightenment: root window not accessible\n");
 	EExit(1);
    }
    visual=DefaultVisual(disp,screen); /* the visual type */
@@ -56,7 +56,7 @@ void X_Connect(void)
 	else root_cmap=0;
      }
    else root_cmap=0;
-   fprintf(stderr,"Enlightenment: connected to display %s (screen %d, %dx%d)\n",
+   fprintf(stderr, "Enlightenment: connected to display %s (screen %d, %dx%d)\n",
 	   XDisplayName(NULL), screen, scr_width, scr_height);
 }
 
